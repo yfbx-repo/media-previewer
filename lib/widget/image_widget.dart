@@ -63,7 +63,7 @@ class ImageWidgetState extends State<ImageWidget> {
   Widget build(BuildContext context) {
     return RawImage(
       image: _imageInfo?.image,
-      scale: _imageInfo.scale ?? 1.0,
+      scale: _imageInfo?.scale ?? 1.0,
     );
   }
 
