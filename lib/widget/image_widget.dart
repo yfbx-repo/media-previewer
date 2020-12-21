@@ -6,17 +6,11 @@ import 'package:flutter/cupertino.dart';
 class ImageWidget extends StatefulWidget {
   final ImageProvider imageProvider;
   final BoxFit fit;
-  final double width;
-  final double height;
-  final double scale;
 
   const ImageWidget({
     Key key,
     @required this.imageProvider,
     this.fit,
-    this.width,
-    this.height,
-    this.scale,
   }) : super(key: key);
 
   @override
@@ -69,10 +63,7 @@ class ImageWidgetState extends State<ImageWidget> {
   Widget build(BuildContext context) {
     return RawImage(
       image: _imageInfo?.image,
-      scale: widget.scale ?? _imageInfo.scale ?? 1.0,
-      fit: widget.fit,
-      width: widget.width,
-      height: widget.height,
+      scale: _imageInfo.scale ?? 1.0,
     );
   }
 
