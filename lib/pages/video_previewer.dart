@@ -104,58 +104,60 @@ class VideoPreviewerState extends State<VideoPreviewer> {
             ),
           ),
         ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Offstage(
-            offstage: !showProgress,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                VideoProgressIndicator(
-                  _controller,
-                  allowScrubbing: true,
-                  padding: EdgeInsets.zero,
-                ),
-                Row(
-                  children: [
-                    CupertinoButton(
-                      onPressed: _onTouch,
-                      child: Icon(
-                        value.isPlaying
-                            ? CupertinoIcons.pause_fill
-                            : CupertinoIcons.play_fill,
-                        color: CupertinoColors.white,
+        if (!widget.isThumb)
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Offstage(
+              offstage: !showProgress,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  VideoProgressIndicator(
+                    _controller,
+                    allowScrubbing: true,
+                    padding: EdgeInsets.zero,
+                  ),
+                  Row(
+                    children: [
+                      CupertinoButton(
+                        onPressed: _onTouch,
+                        child: Icon(
+                          value.isPlaying
+                              ? CupertinoIcons.pause_fill
+                              : CupertinoIcons.play_fill,
+                          color: CupertinoColors.white,
+                        ),
                       ),
-                    ),
-                    Text(
-                      '${value.position.format()} / ${value.duration.format()}',
-                      style:
-                          TextStyle(fontSize: 12, color: CupertinoColors.white),
-                    ),
-                    Expanded(child: Container()),
-                    CupertinoButton(
-                      onPressed: _changeScreen,
-                      child: Icon(
-                        CupertinoIcons.rotate_right_fill,
-                        color: CupertinoColors.white,
+                      Text(
+                        '${value.position.format()} / ${value.duration.format()}',
+                        style: TextStyle(
+                            fontSize: 12, color: CupertinoColors.white),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      Expanded(child: Container()),
+                      CupertinoButton(
+                        onPressed: _changeScreen,
+                        child: Icon(
+                          CupertinoIcons.rotate_right_fill,
+                          color: CupertinoColors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        Align(
-          alignment: Alignment.topRight,
-          child: CupertinoButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Icon(
-              CupertinoIcons.multiply,
-              color: CupertinoColors.white,
+        if (!widget.isThumb)
+          Align(
+            alignment: Alignment.topRight,
+            child: CupertinoButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Icon(
+                CupertinoIcons.multiply,
+                color: CupertinoColors.white,
+              ),
             ),
           ),
-        ),
         if (!value.isPlaying) _buildPalyButton(),
       ],
     );
@@ -175,67 +177,69 @@ class VideoPreviewerState extends State<VideoPreviewer> {
               child: VideoPlayer(_controller),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Offstage(
-              offstage: !showProgress,
+          if (!widget.isThumb)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Offstage(
+                offstage: !showProgress,
+                child: Row(
+                  children: [
+                    CupertinoButton(
+                      onPressed: _onTouch,
+                      child: Icon(
+                        value.isPlaying
+                            ? CupertinoIcons.pause_fill
+                            : CupertinoIcons.play_fill,
+                        color: CupertinoColors.white,
+                      ),
+                    ),
+                    Text(
+                      '${value.position.format()} / ${value.duration.format()}',
+                      style:
+                          TextStyle(fontSize: 12, color: CupertinoColors.white),
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: VideoProgressIndicator(
+                        _controller,
+                        allowScrubbing: true,
+                        padding: EdgeInsets.zero,
+                      ),
+                    ),
+                    CupertinoButton(
+                      onPressed: _changeScreen,
+                      child: Icon(
+                        CupertinoIcons.rotate_right_fill,
+                        color: CupertinoColors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          if (!widget.isThumb)
+            Align(
+              alignment: Alignment.topRight,
               child: Row(
                 children: [
                   CupertinoButton(
-                    onPressed: _onTouch,
+                    onPressed: () => Navigator.of(context).pop(),
                     child: Icon(
-                      value.isPlaying
-                          ? CupertinoIcons.pause_fill
-                          : CupertinoIcons.play_fill,
+                      CupertinoIcons.multiply,
                       color: CupertinoColors.white,
                     ),
                   ),
-                  Text(
-                    '${value.position.format()} / ${value.duration.format()}',
-                    style:
-                        TextStyle(fontSize: 12, color: CupertinoColors.white),
-                  ),
-                  SizedBox(width: 16),
-                  Expanded(
-                    child: VideoProgressIndicator(
-                      _controller,
-                      allowScrubbing: true,
-                      padding: EdgeInsets.zero,
+                  if (widget.title != null)
+                    Text(
+                      widget.title,
+                      style: TextStyle(
+                        color: CupertinoColors.white,
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
-                  CupertinoButton(
-                    onPressed: _changeScreen,
-                    child: Icon(
-                      CupertinoIcons.rotate_right_fill,
-                      color: CupertinoColors.white,
-                    ),
-                  ),
                 ],
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment.topRight,
-            child: Row(
-              children: [
-                CupertinoButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Icon(
-                    CupertinoIcons.multiply,
-                    color: CupertinoColors.white,
-                  ),
-                ),
-                if (widget.title != null)
-                  Text(
-                    widget.title,
-                    style: TextStyle(
-                      color: CupertinoColors.white,
-                      fontSize: 14,
-                    ),
-                  ),
-              ],
-            ),
-          ),
           if (!value.isPlaying) _buildPalyButton(),
         ],
       ),
@@ -259,6 +263,7 @@ class VideoPreviewerState extends State<VideoPreviewer> {
           child: Icon(
             CupertinoIcons.play_fill,
             color: CupertinoColors.white,
+            size: size / 2,
           ),
         ),
       ),
