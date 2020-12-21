@@ -12,11 +12,13 @@ import 'image_widget.dart';
 class MediaWidget extends StatelessWidget {
   final String uri;
   final BoxFit fit;
+  final bool isThumb;
   final MediaController controller;
 
   MediaWidget(
     this.uri, {
     this.fit,
+    this.isThumb = false,
   }) : this.controller = MediaController(uri);
 
   @override
@@ -59,7 +61,10 @@ class MediaWidget extends StatelessWidget {
   }
 
   Widget _buildVideo() {
-    return VideoPreviewer(uri);
+    return VideoPreviewer(
+      uri,
+      isThumb: isThumb,
+    );
   }
 }
 
