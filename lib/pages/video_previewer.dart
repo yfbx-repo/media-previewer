@@ -9,11 +9,13 @@ import '../utils/date_ext.dart';
 class VideoPreviewer extends StatefulWidget {
   final String dataSrc; //资源路径
   final String title;
+  final bool isThumb;
 
   VideoPreviewer(
     this.dataSrc, {
     Key key,
     this.title,
+    this.isThumb = false,
   }) : super(key: key);
 
   @override
@@ -28,8 +30,24 @@ class VideoPreviewerState extends State<VideoPreviewer> {
 
   @override
   void initState() {
-    //全屏
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    _setFullScreen(true);
+    _initController();
+    super.initState();
+  }
+
+  void _setFullScreen(bool full) {
+    if (widget.isThumb) return;
+    if (full) {
+      SystemChrome.setEnabledSystemUIOverlays([]);
+    } else {
+      SystemChrome.setEnabledSystemUIOverlays([
+        SystemUiOverlay.top,
+        SystemUiOverlay.bottom,
+      ]);
+    }
+  }
+
+  void _initController() {
     _controller = _createController();
     _controller.addListener(() {
       final progress = _controller.value.position;
@@ -40,7 +58,6 @@ class VideoPreviewerState extends State<VideoPreviewer> {
       }
     });
     _futureTask = _controller.initialize();
-    super.initState();
   }
 
   VideoPlayerController _createController() {
@@ -58,7 +75,7 @@ class VideoPreviewerState extends State<VideoPreviewer> {
       builder: (_, snapshot) => snapshot.connectionState != ConnectionState.done
           ? Center(child: CupertinoActivityIndicator())
           : GestureDetector(
-              onTap: _showProgressBar,
+              onTap: widget.isThumb ? null : _showProgressBar,
               child: Container(
                 color: CupertinoColors.black,
                 child: ValueListenableBuilder(
@@ -80,7 +97,7 @@ class VideoPreviewerState extends State<VideoPreviewer> {
       children: [
         Center(
           child: GestureDetector(
-            onTap: _showProgressBar,
+            onTap: widget.isThumb ? null : _showProgressBar,
             child: AspectRatio(
               aspectRatio: value.aspectRatio,
               child: VideoPlayer(_controller),
@@ -154,7 +171,7 @@ class VideoPreviewerState extends State<VideoPreviewer> {
         children: [
           Center(
             child: GestureDetector(
-              onTap: _showProgressBar,
+              onTap: widget.isThumb ? null : _showProgressBar,
               child: VideoPlayer(_controller),
             ),
           ),
@@ -226,16 +243,17 @@ class VideoPreviewerState extends State<VideoPreviewer> {
   }
 
   Widget _buildPalyButton() {
+    final size = widget.isThumb ? 24.0 : 50.0;
     return Center(
       child: GestureDetector(
-        onTap: _controller.play,
+        onTap: widget.isThumb ? null : _controller.play,
         behavior: HitTestBehavior.opaque,
         child: Container(
-          height: 50,
-          width: 50,
+          height: size,
+          width: size,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
+            borderRadius: BorderRadius.circular(size / 2),
             color: CupertinoColors.black.withOpacity(0.5),
           ),
           child: Icon(
@@ -270,10 +288,7 @@ class VideoPreviewerState extends State<VideoPreviewer> {
   @override
   void dispose() {
     _controller.dispose();
-    SystemChrome.setEnabledSystemUIOverlays([
-      SystemUiOverlay.top,
-      SystemUiOverlay.bottom,
-    ]);
+    _setFullScreen(false);
     super.dispose();
   }
 }
