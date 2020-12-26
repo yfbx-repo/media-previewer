@@ -81,6 +81,7 @@ class MediaController extends ValueNotifier<String> {
     final image = await state.getCachedImage();
     final option = ImageEditorOption();
     option.addOption(RotateOption(90));
+    option.outputFormat = OutputFormat.png();
 
     final rotatedImage = await ImageEditor.editImage(
       image: image.buffer.asUint8List(),

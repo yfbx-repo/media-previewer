@@ -61,10 +61,13 @@ class ImageWidgetState extends State<ImageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (_imageInfo == null) return CupertinoActivityIndicator();
     return RawImage(
-      image: _imageInfo?.image,
-      scale: _imageInfo?.scale ?? 1.0,
       fit: widget.fit,
+      image: _imageInfo.image,
+      scale: _imageInfo.scale,
+      width: _imageInfo.image.width * 1.0,
+      height: _imageInfo.image.height * 1.0,
     );
   }
 
