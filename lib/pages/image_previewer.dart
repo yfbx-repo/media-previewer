@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 import '../widget/media_widget.dart';
 
@@ -26,6 +27,7 @@ class ImageState extends State<ImagePreviewer> {
 
   @override
   void initState() {
+    _setFullScreen(true);
     super.initState();
     data = widget.data;
     views = data.map((e) => MediaWidget(e)).toList();
@@ -33,59 +35,73 @@ class ImageState extends State<ImagePreviewer> {
     controller = PageController(initialPage: index);
   }
 
+  void _setFullScreen(bool full) {
+    if (full) {
+      SystemChrome.setEnabledSystemUIOverlays([]);
+    } else {
+      SystemChrome.setEnabledSystemUIOverlays([
+        SystemUiOverlay.top,
+        SystemUiOverlay.bottom,
+      ]);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        ///返回时，返回改变后的全部数据
         Navigator.of(context).pop(data);
         return false;
       },
-      child: Stack(
-        children: [
-          PageView.builder(
-            itemCount: data.length,
-            itemBuilder: (_, index) => Container(
-              color: CupertinoColors.black,
-              child: views[index],
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => Navigator.of(context).pop(data),
+        child: Stack(
+          children: [
+            PageView.builder(
+              itemCount: data.length,
+              itemBuilder: (_, index) => Container(
+                color: CupertinoColors.black,
+                child: views[index],
+              ),
+              controller: controller,
+              onPageChanged: onPageChanged,
             ),
-            controller: controller,
-            onPageChanged: onPageChanged,
-          ),
-          Positioned(
-            bottom: 84,
-            left: 0,
-            right: 0,
-            child: Text(
-              '${index + 1}/${data.length}',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: CupertinoColors.white,
-                fontSize: 16,
-                inherit: false,
+            Positioned(
+              bottom: 84,
+              left: 0,
+              right: 0,
+              child: Text(
+                '${index + 1}/${data.length}',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: CupertinoColors.white,
+                  fontSize: 16,
+                  inherit: false,
+                ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 16,
-            left: 0,
-            right: 0,
-            child: SafeArea(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (isImage)
-                    _buildButton(CupertinoIcons.rotate_right, _onRotateImage),
-                  if (isImage) SizedBox(width: 40),
-                  _buildButton(
-                    CupertinoIcons.tray_arrow_down,
-                    () => widget.onDownload?.call(data[index]),
-                  ),
-                ],
+            Positioned(
+              bottom: 16,
+              left: 0,
+              right: 0,
+              child: SafeArea(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (isImage)
+                      _buildButton(CupertinoIcons.rotate_right, _onRotateImage),
+                    if (isImage) SizedBox(width: 40),
+                    _buildButton(
+                      CupertinoIcons.tray_arrow_down,
+                      () => widget.onDownload?.call(data[index]),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -124,5 +140,11 @@ class ImageState extends State<ImagePreviewer> {
     final ctrl = views[index].controller;
     final newPath = await ctrl.rotate();
     data[index] = newPath;
+  }
+
+  @override
+  void dispose() {
+    _setFullScreen(false);
+    super.dispose();
   }
 }

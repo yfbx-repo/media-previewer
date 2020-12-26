@@ -64,6 +64,7 @@ class ImageWidgetState extends State<ImageWidget> {
     return RawImage(
       image: _imageInfo?.image,
       scale: _imageInfo?.scale ?? 1.0,
+      fit: widget.fit,
     );
   }
 
