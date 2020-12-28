@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -7,7 +8,6 @@ import 'package:image_editor/image_editor.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../pages/video_previewer.dart';
-import 'image_widget.dart';
 
 class MediaWidget extends StatelessWidget {
   final String uri;
@@ -17,9 +17,11 @@ class MediaWidget extends StatelessWidget {
 
   MediaWidget(
     this.uri, {
+    Key key,
     this.fit,
     this.isThumb = false,
-  }) : this.controller = MediaController(uri);
+  })  : controller = MediaController(uri),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,13 +44,16 @@ class MediaWidget extends StatelessWidget {
   Widget _buildImage() {
     return ValueListenableBuilder(
       valueListenable: controller,
-      builder: (conetxt, value, child) => ImageWidget(
-        key: controller.imageKey,
-        fit: fit,
-        imageProvider: value.startsWith('http')
-            ? NetworkImage(value)
-            : FileImage(File(value)),
-      ),
+      builder: (BuildContext context, value, Widget child) {
+        if (value == null) return CupertinoActivityIndicator();
+        return RawImage(
+          fit: fit,
+          image: value,
+          scale: 1.0,
+          width: value.width * 1.0,
+          height: value.height * 1.0,
+        );
+      },
     );
   }
 
@@ -68,30 +73,83 @@ class MediaWidget extends StatelessWidget {
   }
 }
 
-class MediaController extends ValueNotifier<String> {
-  final imageKey = GlobalKey();
+class MediaController extends ValueNotifier<ui.Image> {
+  final String uri;
+  int angle = 0;
+  MediaController(this.uri) : super(null) {
+    _getImage();
+  }
 
-  MediaController(String value) : super(value);
+  void _getImage() {
+    ImageProvider provider =
+        uri.startsWith('http') ? NetworkImage(uri) : FileImage(File(uri));
+    provider
+        .resolve(ImageConfiguration.empty)
+        .addListener(ImageStreamListener(_updateImage));
+  }
+
+  void _updateImage(ImageInfo imageInfo, bool synchronousCall) {
+    value = imageInfo.image;
+  }
+
+  ///
+  ///旋转图片
+  ///TODO:不生效，待优化
+  ///
+  void rotate() async {
+    if (value == null) return;
+    final recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder);
+    canvas.drawImage(value.clone(), Offset.zero, Paint());
+    canvas.rotate(90);
+    canvas.save();
+    final picture =
+        await recorder.endRecording().toImage(value.width, value.height);
+    final byteData = await picture.toByteData(format: ui.ImageByteFormat.png);
+
+    angle += 90;
+    if (angle == 360) {
+      angle = 0;
+    }
+
+    value = await decodeImageFromList(byteData.buffer.asUint8List());
+  }
 
   ///
   ///旋转图片
   ///
-  Future<String> rotate() async {
-    final state = imageKey.currentState as ImageWidgetState;
-    final image = await state.getCachedImage();
+  void rotateImage() async {
+    if (value == null) return;
     final option = ImageEditorOption();
     option.addOption(RotateOption(90));
     option.outputFormat = OutputFormat.png();
 
+    final imageByte = await value.toByteData(format: ui.ImageByteFormat.png);
     final rotatedImage = await ImageEditor.editImage(
-      image: image.buffer.asUint8List(),
+      image: imageByte.buffer.asUint8List(),
       imageEditorOption: option,
     );
+
+    angle += 90;
+    if (angle == 360) {
+      angle = 0;
+    }
+
+    value = await decodeImageFromList(rotatedImage);
+  }
+
+  ///
+  ///保存旋转后的图片
+  ///
+  Future<String> saveTemp() async {
+    //未旋转或旋转360度，直接返回原图路径
+    if (angle == 0) return uri;
+
+    final imageByte = await value.toByteData(format: ui.ImageByteFormat.png);
     final name = '${DateTime.now().millisecond}.png';
     final path = '${Directory.systemTemp.path}/$name';
-    final file = await File(path).writeAsBytes(rotatedImage);
-    value = file.path;
-    return value;
+    final file = await File(path).writeAsBytes(imageByte.buffer.asUint8List());
+    return file.path;
   }
 }
 

@@ -30,7 +30,7 @@ class ImageState extends State<ImagePreviewer> {
     _setFullScreen(true);
     super.initState();
     data = widget.data;
-    views = data.map((e) => MediaWidget(e)).toList();
+    views = data.map((e) => MediaWidget(e, key: GlobalKey())).toList();
     index = widget.initialPage;
     controller = PageController(initialPage: index);
   }
@@ -50,12 +50,12 @@ class ImageState extends State<ImagePreviewer> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pop(data);
+        _onPop(context);
         return false;
       },
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: () => Navigator.of(context).pop(data),
+        onTap: () => _onPop(context),
         child: Stack(
           children: [
             PageView.builder(
@@ -137,9 +137,17 @@ class ImageState extends State<ImagePreviewer> {
   ///图片旋转
   ///
   void _onRotateImage() async {
-    final ctrl = views[index].controller;
-    final newPath = await ctrl.rotate();
-    data[index] = newPath;
+    views[index].controller.rotateImage();
+  }
+
+  ///
+  ///退出预览时，更新图片路径
+  ///
+  void _onPop(BuildContext context) async {
+    for (var i = 0; i < views.length; i++) {
+      data[i] = await views[i].controller.saveTemp();
+    }
+    Navigator.of(context).pop(data);
   }
 
   @override
