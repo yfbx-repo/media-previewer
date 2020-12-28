@@ -173,12 +173,21 @@ class VideoPreviewerState extends State<VideoPreviewer> {
                 offstage: !showProgress,
                 child: Row(
                   children: [
-                    CupertinoButton(
-                      onPressed: _onTouch,
-                      child: Icon(
-                        value.isPlaying ? Icons.pause : Icons.play,
-                        size: 16,
-                        color: CupertinoColors.white,
+                    GestureDetector(
+                      onTap: _onTouch,
+                      child: Container(
+                        height: 32,
+                        width: 32,
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: CupertinoColors.black.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Icon(
+                          value.isPlaying ? Icons.pause : Icons.play,
+                          size: 10,
+                          color: CupertinoColors.white,
+                        ),
                       ),
                     ),
                     Text(
