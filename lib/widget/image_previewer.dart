@@ -115,7 +115,7 @@ class ImageState extends State<ImagePreviewer> {
           borderRadius: BorderRadius.circular(25),
           border: Border.all(width: 2, color: Color(0xFF535353)),
         ),
-        child: Icon(icon, color: CupertinoColors.white),
+        child: Icon(icon, color: CupertinoColors.white, size: 40),
       ),
     );
   }

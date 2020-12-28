@@ -110,6 +110,7 @@ class VideoPreviewerState extends State<VideoPreviewer> {
                         onPressed: _onTouch,
                         child: Icon(
                           value.isPlaying ? Icons.pause : Icons.play,
+                          size: 16,
                           color: CupertinoColors.white,
                         ),
                       ),
@@ -135,11 +136,14 @@ class VideoPreviewerState extends State<VideoPreviewer> {
         if (!widget.isThumb)
           Align(
             alignment: Alignment.topRight,
-            child: CupertinoButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Icon(
-                Icons.close,
-                color: CupertinoColors.white,
+            child: SafeArea(
+              child: CupertinoButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Icon(
+                  Icons.close,
+                  color: CupertinoColors.white,
+                  size: 16,
+                ),
               ),
             ),
           ),
@@ -173,6 +177,7 @@ class VideoPreviewerState extends State<VideoPreviewer> {
                       onPressed: _onTouch,
                       child: Icon(
                         value.isPlaying ? Icons.pause : Icons.play,
+                        size: 16,
                         color: CupertinoColors.white,
                       ),
                     ),
@@ -203,24 +208,27 @@ class VideoPreviewerState extends State<VideoPreviewer> {
           if (!widget.isThumb)
             Align(
               alignment: Alignment.topRight,
-              child: Row(
-                children: [
-                  CupertinoButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Icon(
-                      Icons.close,
-                      color: CupertinoColors.white,
-                    ),
-                  ),
-                  if (widget.title != null)
-                    Text(
-                      widget.title,
-                      style: TextStyle(
+              child: SafeArea(
+                child: Row(
+                  children: [
+                    CupertinoButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Icon(
+                        Icons.close,
+                        size: 16,
                         color: CupertinoColors.white,
-                        fontSize: 14,
                       ),
                     ),
-                ],
+                    if (widget.title != null)
+                      Text(
+                        widget.title,
+                        style: TextStyle(
+                          color: CupertinoColors.white,
+                          fontSize: 14,
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           if (!value.isPlaying) _buildPalyButton(),
@@ -231,6 +239,7 @@ class VideoPreviewerState extends State<VideoPreviewer> {
 
   Widget _buildPalyButton() {
     final size = widget.isThumb ? 24.0 : 50.0;
+    final iconSize = widget.isThumb ? 10.0 : 20.0;
     return Center(
       child: GestureDetector(
         onTap: widget.isThumb ? null : _controller.play,
@@ -246,7 +255,7 @@ class VideoPreviewerState extends State<VideoPreviewer> {
           child: Icon(
             Icons.play,
             color: CupertinoColors.white,
-            size: size / 2,
+            size: iconSize,
           ),
         ),
       ),

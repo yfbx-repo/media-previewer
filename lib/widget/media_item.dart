@@ -44,16 +44,23 @@ class MediaItem extends StatelessWidget {
             ),
           ),
           Positioned(
-            right: 0,
+            right: 2,
+            top: 2,
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: onRemove,
               child: Container(
+                width: 20,
+                height: 20,
                 padding: EdgeInsets.all(4.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: CupertinoColors.black.withOpacity(0.5),
+                ),
                 child: Icon(
                   Icons.close,
-                  size: 20,
-                  color: CupertinoColors.black.withOpacity(0.6),
+                  size: 10,
+                  color: CupertinoColors.white,
                 ),
               ),
             ),
