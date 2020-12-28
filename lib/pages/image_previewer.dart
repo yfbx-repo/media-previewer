@@ -30,7 +30,7 @@ class ImageState extends State<ImagePreviewer> {
     _setFullScreen(true);
     super.initState();
     data = widget.data;
-    views = data.map((e) => MediaWidget(e, key: GlobalKey())).toList();
+    views = data.map((e) => MediaWidget(e)).toList();
     index = widget.initialPage;
     controller = PageController(initialPage: index);
   }
