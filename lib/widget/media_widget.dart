@@ -77,7 +77,9 @@ class MediaController extends ValueNotifier<ui.Image> {
   final String uri;
   int angle = 0;
   MediaController(this.uri) : super(null) {
-    _getImage();
+    if (uri.mediaType() == MediaType.image) {
+      _getImage();
+    }
   }
 
   void _getImage() {
