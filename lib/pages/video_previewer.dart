@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 
 import '../utils/date_ext.dart';
@@ -30,21 +29,8 @@ class VideoPreviewerState extends State<VideoPreviewer> {
 
   @override
   void initState() {
-    _setFullScreen(true);
     _initController();
     super.initState();
-  }
-
-  void _setFullScreen(bool full) {
-    if (widget.isThumb) return;
-    if (full) {
-      SystemChrome.setEnabledSystemUIOverlays([]);
-    } else {
-      SystemChrome.setEnabledSystemUIOverlays([
-        SystemUiOverlay.top,
-        SystemUiOverlay.bottom,
-      ]);
-    }
   }
 
   void _initController() {
@@ -293,7 +279,6 @@ class VideoPreviewerState extends State<VideoPreviewer> {
   @override
   void dispose() {
     _controller.dispose();
-    _setFullScreen(false);
     super.dispose();
   }
 }

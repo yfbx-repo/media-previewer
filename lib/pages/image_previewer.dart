@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 
 import '../widget/media_widget.dart';
 
@@ -27,23 +26,11 @@ class ImageState extends State<ImagePreviewer> {
 
   @override
   void initState() {
-    _setFullScreen(true);
     super.initState();
     data = widget.data;
     views = data.map((e) => MediaWidget(e)).toList();
     index = widget.initialPage;
     controller = PageController(initialPage: index);
-  }
-
-  void _setFullScreen(bool full) {
-    if (full) {
-      SystemChrome.setEnabledSystemUIOverlays([]);
-    } else {
-      SystemChrome.setEnabledSystemUIOverlays([
-        SystemUiOverlay.top,
-        SystemUiOverlay.bottom,
-      ]);
-    }
   }
 
   @override
@@ -152,7 +139,6 @@ class ImageState extends State<ImagePreviewer> {
 
   @override
   void dispose() {
-    _setFullScreen(false);
     super.dispose();
   }
 }
