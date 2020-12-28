@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:media_previewer/utils/Icons.dart';
 
-import '../widget/media_widget.dart';
+import 'media_widget.dart';
 
 class ImagePreviewer extends StatefulWidget {
   final List<String> data; //图片数据(url & local path)
@@ -76,11 +77,10 @@ class ImageState extends State<ImagePreviewer> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (isImage)
-                      _buildButton(CupertinoIcons.rotate_right, _onRotateImage),
+                    if (isImage) _buildButton(Icons.rotate, _onRotateImage),
                     if (isImage) SizedBox(width: 40),
                     _buildButton(
-                      CupertinoIcons.tray_arrow_down,
+                      Icons.download,
                       () => widget.onDownload?.call(data[index]),
                     ),
                   ],

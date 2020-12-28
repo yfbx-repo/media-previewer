@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:media_previewer/utils/Icons.dart';
 import 'package:video_player/video_player.dart';
 
 import '../utils/date_ext.dart';
@@ -108,9 +109,7 @@ class VideoPreviewerState extends State<VideoPreviewer> {
                       CupertinoButton(
                         onPressed: _onTouch,
                         child: Icon(
-                          value.isPlaying
-                              ? CupertinoIcons.pause_fill
-                              : CupertinoIcons.play_fill,
+                          value.isPlaying ? Icons.pause : Icons.play,
                           color: CupertinoColors.white,
                         ),
                       ),
@@ -123,7 +122,7 @@ class VideoPreviewerState extends State<VideoPreviewer> {
                       CupertinoButton(
                         onPressed: _changeScreen,
                         child: Icon(
-                          CupertinoIcons.rotate_right_fill,
+                          Icons.screen_rotate,
                           color: CupertinoColors.white,
                         ),
                       ),
@@ -139,7 +138,7 @@ class VideoPreviewerState extends State<VideoPreviewer> {
             child: CupertinoButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Icon(
-                CupertinoIcons.multiply,
+                Icons.close,
                 color: CupertinoColors.white,
               ),
             ),
@@ -173,9 +172,7 @@ class VideoPreviewerState extends State<VideoPreviewer> {
                     CupertinoButton(
                       onPressed: _onTouch,
                       child: Icon(
-                        value.isPlaying
-                            ? CupertinoIcons.pause_fill
-                            : CupertinoIcons.play_fill,
+                        value.isPlaying ? Icons.pause : Icons.play,
                         color: CupertinoColors.white,
                       ),
                     ),
@@ -195,7 +192,7 @@ class VideoPreviewerState extends State<VideoPreviewer> {
                     CupertinoButton(
                       onPressed: _changeScreen,
                       child: Icon(
-                        CupertinoIcons.rotate_right_fill,
+                        Icons.screen_rotate,
                         color: CupertinoColors.white,
                       ),
                     ),
@@ -211,7 +208,7 @@ class VideoPreviewerState extends State<VideoPreviewer> {
                   CupertinoButton(
                     onPressed: () => Navigator.of(context).pop(),
                     child: Icon(
-                      CupertinoIcons.multiply,
+                      Icons.close,
                       color: CupertinoColors.white,
                     ),
                   ),
@@ -247,7 +244,7 @@ class VideoPreviewerState extends State<VideoPreviewer> {
             color: CupertinoColors.black.withOpacity(0.5),
           ),
           child: Icon(
-            CupertinoIcons.play_fill,
+            Icons.play,
             color: CupertinoColors.white,
             size: size / 2,
           ),

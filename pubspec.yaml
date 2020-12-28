@@ -18,8 +18,6 @@ dependencies:
   # 图片编辑
   image_editor: ^0.7.3   
 
-  cupertino_icons: ^1.0.0   
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -46,12 +44,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: icons
+      fonts:
+        - asset: fonts/iconfont.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

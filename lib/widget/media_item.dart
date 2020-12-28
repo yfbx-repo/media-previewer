@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:media_previewer/media_previewer.dart';
+import 'package:media_previewer/utils/Icons.dart';
 
 class MediaItem extends StatelessWidget {
   final double size;
@@ -50,7 +51,7 @@ class MediaItem extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.all(4.0),
                 child: Icon(
-                  CupertinoIcons.clear_circled_solid,
+                  Icons.close,
                   size: 20,
                   color: CupertinoColors.black.withOpacity(0.6),
                 ),

@@ -7,7 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:image_editor/image_editor.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../pages/video_previewer.dart';
+import 'video_previewer.dart';
 
 class MediaWidget extends StatelessWidget {
   final String uri;
