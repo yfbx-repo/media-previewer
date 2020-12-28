@@ -102,7 +102,7 @@ class MediaController extends ValueNotifier<ui.Image> {
     if (value == null) return;
     final recorder = ui.PictureRecorder();
     final canvas = Canvas(recorder);
-    canvas.drawImage(value.clone(), Offset.zero, Paint());
+    canvas.drawImage(value, Offset.zero, Paint());
     canvas.rotate(90);
     canvas.save();
     final picture =
