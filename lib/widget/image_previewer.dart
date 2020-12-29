@@ -6,12 +6,14 @@ import 'media_widget.dart';
 class ImagePreviewer extends StatefulWidget {
   final List<String> data; //图片数据(url & local path)
   final int initialPage; //初始页码
+  final bool editable;
   final ValueChanged<String> onDownload;
 
   ImagePreviewer({
     Key key,
-    this.data,
-    this.initialPage,
+    @required this.data,
+    this.initialPage = 0,
+    this.editable = true,
     this.onDownload,
   }) : super(key: key);
 
@@ -77,8 +79,9 @@ class ImageState extends State<ImagePreviewer> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (isImage) _buildButton(Icons.rotate, _onRotateImage),
-                    if (isImage) SizedBox(width: 40),
+                    if (widget.editable && isImage)
+                      _buildButton(Icons.rotate, _onRotateImage),
+                    if (widget.editable && isImage) SizedBox(width: 40),
                     _buildButton(
                       Icons.download,
                       () => widget.onDownload?.call(data[index]),
